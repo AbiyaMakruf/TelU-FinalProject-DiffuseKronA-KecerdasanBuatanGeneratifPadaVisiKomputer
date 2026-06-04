@@ -1,5 +1,5 @@
-subjects="dog6" # Subject Name
-# dog6 subject images are available at dataset link provided in the README
+subjects="human_abiya" # Subject Name
+# abiya subject images are available at dataset link provided in the README
 export MODEL_NAME="stabilityai/stable-diffusion-xl-base-1.0" # Model card
 export OUTPUT_DIR="../outputs/${subjects}" # Where to save the model
 export INSTANCE_DIR="../data/${subjects}/input/" # Where the input data is stored
@@ -20,7 +20,7 @@ krona_unet_o_rank_a1=$a1 # out matrix factorization rank of a1
 krona_unet_o_rank_a2=$a2 # out matrix factorization rank of a2
 
 lr=1e-3     # Learning rate
-steps=1000   # Number of fine-tuning steps
+steps=5000   # Number of fine-tuning steps
 
 # Note that we kept text encoder frozen to further reduce the parameter overhead.
 # We don't recommend to fine tune Linear layers (MLPs). 
@@ -31,7 +31,7 @@ accelerate launch train_dreambooth_lora_sdxl.py \
     --instance_data_dir=$INSTANCE_DIR \
     --output_dir=$OUTPUT_DIR \
     --mixed_precision="fp16" \
-    --instance_prompt="a photo of sks${subjects}" \
+    --instance_prompt="a sks${subjects} person" \
     --resolution=1024 \
     --train_batch_size=1 \
     --gradient_accumulation_steps=4 \
@@ -44,7 +44,6 @@ accelerate launch train_dreambooth_lora_sdxl.py \
     --diffusion_model="sdxl" \
     --use_8bit_adam \
     --gradient_checkpointing \
-    --enable_xformers_memory_efficient_attention \
     --attn_update_unet=$attn_update_unet \
     --krona_unet_k_rank_a1=$krona_unet_k_rank_a1 \
     --krona_unet_k_rank_a2=$krona_unet_k_rank_a2 \

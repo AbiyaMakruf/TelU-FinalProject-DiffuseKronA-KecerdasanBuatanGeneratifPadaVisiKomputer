@@ -13,7 +13,7 @@ def generator(checkpoint_path, output_dir, prompt, seed=0):
     else: os.mkdir(image_dir)
 
     # load the SD model
-    model_id = "stabilityai/stable-diffusion-2-1-base"
+    model_id = "Manojb/stable-diffusion-2-1-base"
     pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
     pipe = pipe.to("cuda")
     pipe.load_lora_weights(checkpoint_path, weight_name="pytorch_lora_weights.safetensors")

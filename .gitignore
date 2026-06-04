@@ -178,3 +178,5 @@ tags
 .ruff_cache
 
 wandb
+outputs/
+data/

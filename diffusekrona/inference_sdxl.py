@@ -15,14 +15,16 @@ def generator(checkpoint_path, output_dir, prompt, seed=0):
     pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
     pipe = pipe.to("cuda")
     pipe.load_lora_weights(checkpoint_path)
-    refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
-        "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16",
-    )
-    refiner.to("cuda"); generator = torch.Generator("cuda").manual_seed(seed)
+    # refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
+    #     "stabilityai/stable-diffusion-xl-refiner-1.0", torch_dtype=torch.float16, use_safetensors=True, variant="fp16",
+    # )
+    # refiner.to("cuda")
+    generator = torch.Generator("cuda").manual_seed(seed)
     
     # generate images
-    image = pipe(prompt=prompt, output_type="latent", generator=generator).images[0]
-    image = refiner(prompt=prompt, image=image[None, :], generator=generator).images[0]
+    # image = pipe(prompt=prompt, output_type="latent", generator=generator).images[0]
+    image = pipe(prompt=prompt, generator=generator).images[0]
+    # image = refiner(prompt=prompt, image=image[None, :], generator=generator).images[0]
         
     image_save_path = os.path.join(image_dir, f"image_{seed}.jpg")
     image.save(image_save_path)
